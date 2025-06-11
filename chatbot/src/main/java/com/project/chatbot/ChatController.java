@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("v1/ai/generate")
+@RequestMapping("/v1/ai/generate")
 public class ChatController {
 
     private final GptService gptService;
