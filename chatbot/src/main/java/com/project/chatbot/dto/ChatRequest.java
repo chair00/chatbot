@@ -1,4 +1,6 @@
 package com.project.chatbot.dto;
 
-public record ChatRequest(String sessionId, String context, String message) {
+import java.util.List;
+
+public record ChatRequest(String situation, List<Message> history, String message) {
 }

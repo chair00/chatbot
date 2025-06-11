@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/chat")
+@RequestMapping("v1/ai/generate")
 public class ChatController {
 
     private final GptService gptService;
@@ -27,12 +28,15 @@ public class ChatController {
 
     @PostMapping
     public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request) throws JsonProcessingException {
-        String sessionId = request.sessionId();
+        //String sessionId = request.sessionId();
         String message = request.message();
+        List<Message> history = request.history();
 
-        memoryStore.addMessage(sessionId, new Message("user", message));
+        //memoryStore.addMessage(sessionId, new Message("user", message));
 
-        String content = gptService.callGpt(memoryStore.getHistory(sessionId), request.context());
+        history.add(new Message("user", message));
+
+        String content = gptService.callGpt(history, request.situation());
 
         String correction = "";
         String response = "";
@@ -49,7 +53,7 @@ public class ChatController {
             response = "(응답 없음)";
         }
 
-        memoryStore.addMessage(sessionId, new Message("assistant", content));
+        //memoryStore.addMessage(sessionId, new Message("assistant", content));
 
         return ResponseEntity.ok(new ChatResponse(
                 message,

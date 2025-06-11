@@ -26,17 +26,26 @@ public class GptService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String callGpt(List<Message> history, String context) throws JsonProcessingException {
+    public String callGpt(List<Message> history, String situation) throws JsonProcessingException {
         List<Message> messages = new ArrayList<>();
 
         // system 프롬프트 (context 포함)
         messages.add(new Message("system", """
-                    당신은 한국어 문장을 교정하고 상황에 맞게 응답하는 AI입니다.
-                    상황: %s
-                    형식:
-                    교정: [교정된 문장]
-                    응답: [자연스러운 응답]
-                """.formatted(context)));
+                    너는 한국어와 베트남어를 유창하게 잘하며 각 나라의 문화에 대해 잘 알고 있다. 그래서 너는 한국어를 배우는 베트남인을 도와주는 친근한 대화 파트너이다.
+                    사용자가 입력한 문장은 베트남어, 한국어, 또는 혼용된 말일 수 있고, 문법 오류나 오타, 어색한 표현, 존댓말/반말 혼용이 있을 수 있다.
+                    특히 입력 문장에 철자나 단어 오타가 있더라도, 사용자의 의도를 대화 상황에 맞게 말의 의미를 유추해서 자연스럽게 고쳐줘.
+                    대화 상황: %s에 맞춰 말투(반말/존댓말)를 조정해 줘. 예를 들어, 친구라면 반말을 쓰고 처음 보는 사람이면 존댓말을 쓰는 거처럼.
+                                  
+                    너의 역할은:
+                    1. 사용자의 말을 자연스럽고 상황에 맞는 어투로 한국어로 고치기.\s
+                    2. 상황에 맞게 너의 역할을 생각해서 반말/존댓말을 자연스럽게 사용하기.
+                    3. 먼저 고쳐준 문장을 출력.
+                    4. 이어서 상황에 맞게 자연스럽게 대화를 이어가는 말하기.
+                                  
+                    ❗ 항상 아래 형식을 반드시 따라야 해:
+                    - 교정: (자연스럽게 고친 문장)
+                    - 응답: (이어지는 자연스러운 대화 멘트)
+                """.formatted(situation)));
 
         messages.addAll(history); // 기존 히스토리 포함
 
@@ -77,6 +86,10 @@ public class GptService {
 
         GptResponse gptResponse = objectMapper.readValue(response.getBody(), GptResponse.class);
         String fullText = gptResponse.getChoices().get(0).getMessage().getContent();
+        System.out.println("전체 응답");
+        System.out.println(response.getBody());
+        System.out.println("\n추출");
+        System.out.println(fullText);
 
         return fullText; // GPT 응답 원문 (JSON)
     }
