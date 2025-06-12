@@ -19,7 +19,7 @@ import java.util.Map;
 public class GptService {
 
     private final RestTemplate restTemplate; //GPT API 사용할 때 쓰는건가봐
-    private final String OPENAI_URL = "https://api.openai.com/v1/chat/completions"; // 넣어줘야함
+    private final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
     @Value("${openai.api.key}")
     private String apiKey;
