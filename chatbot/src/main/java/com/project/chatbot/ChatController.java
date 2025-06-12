@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("v1/ai/generate")
+@RequestMapping("/v1/ai/generate")
 public class ChatController {
 
     private final GptService gptService;
@@ -28,11 +28,8 @@ public class ChatController {
 
     @PostMapping
     public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request) throws JsonProcessingException {
-        //String sessionId = request.sessionId();
         String message = request.message();
         List<Message> history = request.history();
-
-        //memoryStore.addMessage(sessionId, new Message("user", message));
 
         history.add(new Message("user", message));
 
@@ -48,12 +45,9 @@ public class ChatController {
             correction = content.substring(correctionStart, responseStart).trim();
             response = content.substring(responseStart + 4).trim();
         } else {
-            // 혹시 형식이 다르면 fallback
             correction = content;
             response = "(응답 없음)";
         }
-
-        //memoryStore.addMessage(sessionId, new Message("assistant", content));
 
         return ResponseEntity.ok(new ChatResponse(
                 message,
