@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.chatbot.dto.GptResponse;
 import com.project.chatbot.dto.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class GptService {
 
     private final RestTemplate restTemplate; //GPT API 사용할 때 쓰는건가봐
@@ -45,6 +47,12 @@ public class GptService {
                     ❗ 항상 아래 형식을 반드시 따라야 해:
                     - 교정: (자연스럽게 고친 문장)
                     - 응답: (이어지는 자연스러운 대화 멘트)
+                    
+                    ❗❗ 마지막으로 다시 강조합니다: 항상 아래 형식을 반드시 지켜야 합니다. 절대로 생략하지 마세요. \s
+                    - 교정: (자연스럽게 고친 문장) \s
+                    - 응답: (이어지는 자연스러운 대화 멘트) \s
+                    이 형식이 없으면 출력은 무효입니다.
+                    
                 """.formatted(situation)));
 
         messages.addAll(history); // 기존 히스토리 포함
@@ -57,11 +65,9 @@ public class GptService {
                     "messages", messages,
                     "temperature", 0.7
             ));
-            System.out.println("\n======= ✅ GPT 요청 JSON =======");
-            System.out.println(gptRequestJson);
-            System.out.println("================================\n");
+            log.info("\n======= GPT 요청 JSON =======\n{}\n================================", gptRequestJson);
         } catch (JsonProcessingException e) {
-            System.out.println("❌ GPT 요청 JSON 직렬화 실패: " + e.getMessage());
+            log.error("GPT 요청 JSON 직렬화 실패: {} ", e.getMessage());
         }
 
         // 요청 구성
@@ -84,12 +90,17 @@ public class GptService {
                 String.class
         );
 
-        GptResponse gptResponse = objectMapper.readValue(response.getBody(), GptResponse.class);
-        String fullText = gptResponse.getChoices().get(0).getMessage().getContent();
-        System.out.println("전체 응답");
-        System.out.println(response.getBody());
-        System.out.println("\n추출");
-        System.out.println(fullText);
+//        GptResponse gptResponse = objectMapper.readValue(response.getBody(), GptResponse.class);
+//        String fullText = gptResponse.getChoices().get(0).getMessage().getContent();
+
+        String fullText = "";
+        try {
+            GptResponse gptResponse = objectMapper.readValue(response.getBody(), GptResponse.class);
+            fullText = gptResponse.getChoices().get(0).getMessage().getContent();
+            log.info("GPT 응답 content 추출:\n{}", fullText);
+        } catch (Exception e) {
+            log.error("GPT 응답 처리 중 오류 발생: {}", e.getMessage(), e);
+        }
 
         return fullText; // GPT 응답 원문 (JSON)
     }
