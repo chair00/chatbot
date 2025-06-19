@@ -36,6 +36,15 @@ dependencies {
 
 }
 
+bootJar {
+	archiveBaseName.set('ChatBotApplication') // 파일 이름 (확장자 제외)
+	archiveVersion.set('')
+}
+
+jar {
+	enabled = false
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
