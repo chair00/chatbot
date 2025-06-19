@@ -18,12 +18,4 @@ public class GptResponse {
     public static class Choice {
         private Message message;
     }
-
-    @Getter
-    @Setter
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Message {
-        private String role;
-        private String content;
-    }
 }
