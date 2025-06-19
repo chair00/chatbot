@@ -36,7 +36,7 @@ public class GptService {
         messages.add(new Message("system", systemPrompt));
         messages.addAll(history);
 
-        // 요청 구성
+        // 요청
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
