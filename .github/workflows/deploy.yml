@@ -32,6 +32,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Debug jar list
+        run: ls -lh build/libs
+
       - name: Upload jar to EC2c
         run: |
           scp -i ~/.ssh/id_rsa build/libs/ChatBotApplication.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/app/app.jar

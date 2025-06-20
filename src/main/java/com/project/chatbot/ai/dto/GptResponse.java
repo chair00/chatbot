@@ -1,4 +1,4 @@
-package com.project.chatbot.dto;
+package com.project.chatbot.ai.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.project.chatbot.dto;
+package com.project.chatbot.ai.dto;
 
 public record ChatResponse(String message, String correction, String response, String timestamp) {
 }

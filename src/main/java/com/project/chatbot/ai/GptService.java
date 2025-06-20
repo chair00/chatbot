@@ -1,10 +1,9 @@
-package com.project.chatbot;
+package com.project.chatbot.ai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.chatbot.dto.GptResponse;
-import com.project.chatbot.dto.Message;
-import lombok.RequiredArgsConstructor;
+import com.project.chatbot.ai.dto.GptResponse;
+import com.project.chatbot.ai.dto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -30,6 +29,7 @@ public class GptService {
     }
 
     public String callGpt(List<Message> history, String situation) throws JsonProcessingException {
+        log.info("API KEY = {}", System.getenv("OPENAI_API_KEY"));
         List<Message> messages = new ArrayList<>();
 
         String systemPrompt = PromptLoader.loadPrompt("system_prompt.txt", situation);

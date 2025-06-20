@@ -1,9 +1,9 @@
-package com.project.chatbot;
+package com.project.chatbot.ai;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.project.chatbot.dto.ChatRequest;
-import com.project.chatbot.dto.ChatResponse;
-import com.project.chatbot.dto.Message;
+import com.project.chatbot.ai.dto.ChatRequest;
+import com.project.chatbot.ai.dto.ChatResponse;
+import com.project.chatbot.ai.dto.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/ai/generate")

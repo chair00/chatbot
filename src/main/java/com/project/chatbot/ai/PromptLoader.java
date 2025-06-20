@@ -1,4 +1,4 @@
-package com.project.chatbot;
+package com.project.chatbot.ai;
 
 import org.springframework.core.io.ClassPathResource;
 

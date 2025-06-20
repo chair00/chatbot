@@ -1,4 +1,4 @@
-package com.project.chatbot;
+package com.project.chatbot.ai;
 
 public class GptParser {
     public static String extractCorrection(String content) {
